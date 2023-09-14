@@ -1,35 +1,20 @@
-"""
-ASGI config for whatsapp_clone project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/3.0/howto/deployment/asgi/
-"""
-
 import os
 
 from django.core.asgi import get_asgi_application
 
-from django.urls import path
-
-from channels.routing import ProtocolTypeRouter, URLRouter
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'maisprevi_protocolo.settings')
 
 from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter , URLRouter
+from chats import routing
 
-from chats.consumers import PersonalChatConsumer, OnlineStatusConsumer, NotificationConsumer
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'whatsapp_clone.settings')
-
-application = get_asgi_application()
-
-
-application = ProtocolTypeRouter({
-    'websocket': AuthMiddlewareStack(
-        URLRouter([
-            path('ws/<int:id>/', PersonalChatConsumer),
-            path('ws/online/', OnlineStatusConsumer),
-            path('ws/notify/', NotificationConsumer)
-        ])
-    )
-})
+application = ProtocolTypeRouter(
+    {
+        "http" : get_asgi_application() ,
+        "websocket" : AuthMiddlewareStack(
+            URLRouter(
+                routing.websocket_urlpatterns
+            )   
+        )
+    }
+)

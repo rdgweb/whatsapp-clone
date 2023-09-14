@@ -1,9 +1,7 @@
-const notify_socket = new WebSocket(
-    'ws://'
-    + window.location.host
-    + '/ws/'
-    +'notify/'
-)
+document.addEventListener("DOMContentLoaded", function () {
+    const notify_socket = new WebSocket(
+        'ws://' + window.location.host + '/ws/' + 'notify/'
+    );
 
 notify_socket.onopen = function(e){
     console.log("CONNECTED TO NOTIFICATION");
@@ -20,3 +18,5 @@ notify_socket.onmessage = function(e){
 notify_socket.onclose = function(e){
     console.log("DISCONNECTED FROM NOTIFICATION");
 }
+
+});
